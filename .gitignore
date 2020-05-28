@@ -1,2 +1,4 @@
 node_modules
+routes/functions/public/images/***
+temp
 .env

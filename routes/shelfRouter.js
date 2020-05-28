@@ -19,7 +19,11 @@ shelfRouter
                 (shelves) => {
                     res.statusCode = 200;
                     res.setHeader("Content-Type", "application/json");
-                    res.json(shelves);
+                    const ress = [];
+                    shelves.map( item => {
+                        ress.push({ _id: item._id, name: item.name, row: item.row, column: item.column, neighbors: item.neighbors.map(item => item.neighbor.name) })
+                    })
+                    res.json(ress);
                 },
                 (err) => next(err),
             )

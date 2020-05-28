@@ -13,6 +13,7 @@ const cartRouter = require("./routes/cartRouter");
 const storeRouter = require("./routes/storeRouter");
 const shelfRouter = require("./routes/shelfRouter");
 const productRouter = require("./routes/productRouter");
+const shortestPathRouter = require("./routes/shortestPathRoute");
 //
 // const adminUser = require("./routes/adminUserRoutes");
 // Database
@@ -59,6 +60,7 @@ app.use("/cart", cartRouter);
 app.use("/store", storeRouter);
 app.use("/shelf", shelfRouter);
 app.use("/product", productRouter);
+app.use("/shortestPath", shortestPathRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
