@@ -12,7 +12,6 @@ router.use(bodyParser.json());
 /* GET users listing. */
 /* Only for Admin */
 router.get("/", authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-    console.log(req.user.admin)
     User.find({})
         .then(
             (users) => {

@@ -15,6 +15,10 @@ const shelfSchema = new Schema(
             type: Number,
             required: true,
         },
+        isCorner: {
+            type: Number,
+            required: true,
+        },
         neighbors: [{
             neighbor: {
                 type: mongoose.Schema.Types.ObjectId,

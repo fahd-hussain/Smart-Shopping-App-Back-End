@@ -37,19 +37,16 @@ listRouter
             req.body.author = req.user._id;
             const itemsFromUser = [];
             req.body.listItems.map((ele) => itemsFromUser.push(ele.itemName));
-            console.log(itemsFromUser)
             let data = {};
             Store.find({ name: { $in: itemsFromUser } }, (err, docs) => {
                 let temp = [];
                 docs.map((ele) => {
-                    console.log(ele)
                     if (!ele) {
                     } else {
                         temp.push({ itemName: ele.name, shelf: ele.shelf });
                     }
                 });
                 data = { name: req.body.name, listItems: temp, author: req.body.author };
-                // console.log(data)
                 if (Object.entries(data).length == 0) {
                     console.log("Empty");
                 } else {

@@ -17,6 +17,60 @@ module.exports = class Map {
         this._id = _id;
     }
 
+    _drawShelves = () => {
+        this.rc.rectangle(20, 0, 80, 40, {
+            fill: "#54B0F3",
+            fillStyle: "solid",
+            bowing: 2,
+            strokeWidth: 2,
+            stroke: "#38101C",
+            roughness: 1,
+        });
+        this.rc.rectangle(400, 0, 80, 40, {
+            fill: "#dc3545",
+            fillStyle: "solid",
+            bowing: 2,
+            strokeWidth: 2,
+            stroke: "#38101C",
+            roughness: 1,
+        });
+        let i;
+        for (i = 0; i < this.Shelf.length; i++) {
+            let r1 = (this.Shelf[i].row - 1) * 100;
+            let c1 = this.Shelf[i].column * 100;
+            if (this.Shelf[i].isCorner === 0) {
+                this.rc.rectangle(r1 + 20, c1, 60, 100, {
+                    fill: "#70483C",
+                    fillStyle: "solid",
+                    bowing: 2,
+                    strokeWidth: 2,
+                    stroke: "#38101C",
+                    roughness: 1,
+                });
+            }
+            if (this.Shelf[i].isCorner === 1) {
+                this.rc.rectangle(r1 + 20, c1 + 20, 60, 80, {
+                    fill: "#70483C",
+                    fillStyle: "solid",
+                    bowing: 2,
+                    strokeWidth: 2,
+                    stroke: "#38101C",
+                    roughness: 1,
+                });
+            }
+            if (this.Shelf[i].isCorner === 2) {
+                this.rc.rectangle(r1 + 20, c1, 60, 80, {
+                    fill: "#70483C",
+                    fillStyle: "solid",
+                    bowing: 2,
+                    strokeWidth: 2,
+                    stroke: "#38101C",
+                    roughness: 1,
+                });
+            }
+        }
+    };
+
     _shelvesFromDatabase = () => {
         let promiseArray = [];
 
@@ -26,12 +80,12 @@ module.exports = class Map {
                     .find({})
                     .populate("neighbors.neighbor")
                     .then((res) => {
-                        // console.log(res)
                         res.map((item) => {
                             this.Shelf.push({
                                 name: item.name,
                                 row: item.row,
                                 column: item.column,
+                                isCorner: item.isCorner,
                                 neighbors: item.neighbors,
                             });
                         });
@@ -48,10 +102,8 @@ module.exports = class Map {
     };
 
     _plotShelvesOnGraph = () => {
-        // console.log(this.Shelf)
         let map = {};
         this.Shelf.map((item) => {
-            // console.log(item)
             let temp = {};
             item.neighbors.map((item2) => {
                 temp[item2.neighbor.name] = 1;
@@ -74,53 +126,58 @@ module.exports = class Map {
 
     _findShortestPath = (map, list) => {
         const route = new Graph(map);
-        // console.log(list)
         const sortedList = this._sorting(list);
-        // console.log(sortedList)
         const path = [];
         let i = 0;
         for (i = 0; i < sortedList.length - 1; i++) {
             path.push(route.path(sortedList[i].shelf, sortedList[i + 1].shelf));
         }
-        // console.log(path)
         return path;
     };
 
     _drawLine = (path) => {
         const graph = [];
-        path.map((item) => {
-            item.map((item2) => {
-                graph.push(this.Shelf.filter((shelf) => shelf.name === item2));
-            });
-        });
-        let i = 0;
-        for (i = 0; i < graph.length - 1; i++) {
-            const x1 = graph[i][0].row;
-            const y1 = graph[i][0].column;
-            const x2 = graph[i + 1][0].row;
-            const y2 = graph[i + 1][0].column;
-            this.rc.line(x1 * 100, y1 * 100, x2 * 100, y2 * 100, {
-                strokeWidth: 4,
-                roughness: 0,
-                stroke: "#dc3545",
-            });
+        let j;
+        let lastPoint;
+        graph.push(this.Shelf.filter((shelf) => shelf.name === "A000"));
+        for (j = 0; j < path.length; j++) {
+            if (path[j] !== null) {
+                path[j].map((item2) => {
+                    graph.push(this.Shelf.filter((shelf) => shelf.name === item2));
+                    lastPoint = item2;
+                });
+            }
         }
+        graph.push(this.Shelf.filter((shelf) => shelf.name === lastPoint[0] + 1));
+        graph.push(this.Shelf.filter((shelf) => shelf.name === "Z999"));
+        let i;
+        const points = [];
+        for (i = 0; i < graph.length; i++) {
+            let r1 = graph[i][0].row * 100;
+            let c1 = graph[i][0].column * 100;
 
-        this._outPut(this.image);
-    };
-
-    _outPut = (image) => {
+            let point = [];
+            if (graph[i][0].isCorner === 2) {
+                c1 += 100;
+            }
+            this.rc.circle(r1, c1, 10, {
+                fill: "#38101C",
+                fillStyle: "solid",
+                roughness: 0,
+            });
+            point.push(r1, c1);
+            points.push(point);
+        }
+        this.rc.linearPath(points, {
+            stroke: "#dc3545",
+            strokeWidth: 4,
+            roughness: 0,
+        });
         let promiseArray = [];
 
         promiseArray.push(
             new Promise((resolve, reject) => {
-                PImage.encodePNGToStream(image, fs.createWriteStream(`${__dirname}/public/images/img${this._id}.png`))
-                    .then(() => {
-                        console.log(`wrote out the png file to ${this._id}.png`);
-                    })
-                    .catch((e) => {
-                        console.log("there was an error writing");
-                    });
+                this._outPut(this.image);
 
                 setTimeout(() => {
                     resolve();
@@ -128,6 +185,16 @@ module.exports = class Map {
             }),
         );
 
-        return Promise.all(promiseArray)
+        return Promise.all(promiseArray);
+    };
+
+    _outPut = (image) => {
+        PImage.encodePNGToStream(image, fs.createWriteStream(`${__dirname}/public/images/img${this._id}.png`))
+            .then(() => {
+                console.log(`wrote out the png file to ${this._id}.png`);
+            })
+            .catch((e) => {
+                console.log("there was an error writing");
+            });
     };
 };

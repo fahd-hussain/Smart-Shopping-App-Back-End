@@ -28,7 +28,6 @@ storeRouter
         Store.create(req.body)
             .then(
                 (store) => {
-                    console.log("Store Created ", store);
                     res.statusCode = 200;
                     res.setHeader("Content-Type", "application/json");
                     res.json(store);
@@ -57,7 +56,7 @@ storeRouter
 storeRouter
     .route("/:storeId")
     .get((req, res, next) => {
-        Store.find({ barcode:req.params.storeId})
+        Store.find({ barcode: req.params.storeId})
             .populate("shelf")
             .then(
                 (store) => {

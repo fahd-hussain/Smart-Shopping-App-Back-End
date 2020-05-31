@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const fs = require("fs")
+const fs = require("fs");
 
 // Local Imports
 const authenticate = require("../middleware/authenticate");
@@ -18,6 +18,7 @@ shortestPathRouter
         const MAP = new Map(800, 600, req.params.listId);
         let map = [];
         MAP._shelvesFromDatabase().then(() => {
+            // MAP._drawShelves();
             map = MAP._plotShelvesOnGraph();
             Lists.findById(req.params.listId)
                 .populate("author")
@@ -39,25 +40,23 @@ shortestPathRouter
                                     console.log("Empty");
                                 } else {
                                     const shortestPath = MAP._findShortestPath(map, temp);
-                                    // console.log(shortestPath);
-                                    MAP._drawLine(shortestPath);
-                                    MAP._outPut()
-                                    .then(() => {
-                                        fs.readFile(`${__dirname}/functions/public/images/img${req.params.listId}.png`, (err, content) => {
-                                            if (err) {
-                                                response.statusCode = 400;
-                                                response.setHeader("Content-Type", "application/json")
-                                                // console.log(err);
-                                                response.json(err);    
-                                            } else {
-                                                response.statusCode = 200
-                                                response.setHeader('Content-type', 'image/png')
-                                                console.log(content)
-                                                response.end(content);
-                                            }
-                                        })
-                                    })
-                                    
+                                    MAP._drawShelves();
+                                    MAP._drawLine(shortestPath).then(() => {
+                                        fs.readFile(
+                                            `${__dirname}/functions/public/images/img${req.params.listId}.png`,
+                                            (err, content) => {
+                                                if (err) {
+                                                    response.statusCode = 400;
+                                                    response.setHeader("Content-Type", "application/json");
+                                                    response.json(err);
+                                                } else {
+                                                    response.statusCode = 200;
+                                                    response.setHeader("Content-type", "image/png");
+                                                    response.end(content);
+                                                }
+                                            },
+                                        );
+                                    });
                                 }
                             });
                     },

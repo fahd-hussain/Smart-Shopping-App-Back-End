@@ -8,6 +8,15 @@ const storeSchema = new Schema(
             type: String,
             required: true,
         },
+        barcode: {
+            type: String,
+            required: true,
+        },
+        price: {
+            type: Currency,
+            required: true,
+            min: 0,
+        },
         shelf: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Shelf",
