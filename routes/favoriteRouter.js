@@ -157,7 +157,7 @@ favoriteRouter
             .then(
                 (favorite) => {
                     if (favorite) {
-                        const isFound = ( element ) => String(element._id) === req.params.promoId
+                        const isFound = (element) => String(element._id) === req.params.promoId;
 
                         index = favorite.promotion.findIndex(isFound);
                         if (index >= 0) {
