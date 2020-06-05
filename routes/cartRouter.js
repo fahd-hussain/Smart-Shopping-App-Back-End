@@ -75,7 +75,7 @@ cartRouter
 
 cartRouter
     .route("/:cartId")
-    .get((req, res, next) => {
+    .get(authenticate.verifyUser, (req, res, next) => {
         Carts.findById(req.params.cartId)
             .populate("author")
             .populate("product")

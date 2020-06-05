@@ -68,11 +68,11 @@ storeRouter
             )
             .catch((err) => next(err));
     })
-    .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    .post( authenticate.verifyAdmin, (req, res, next) => {
         res.statusCode = 403;
         res.end("POST operation not supported on /stores/" + req.params.storeId);
     })
-    .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    .put( authenticate.verifyAdmin, (req, res, next) => {
         Store.findByIdAndUpdate(
             req.params.storeId,
             {
@@ -90,7 +90,7 @@ storeRouter
             )
             .catch((err) => next(err));
     })
-    .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    .delete( authenticate.verifyAdmin, (req, res, next) => {
         Store.findByIdAndRemove(req.params.storeId)
             .then(
                 (resp) => {
