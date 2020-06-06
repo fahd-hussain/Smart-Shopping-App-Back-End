@@ -25,6 +25,7 @@ storeRouter
             .catch((err) => next(err));
     })
     .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+        // console.log(typeof(parseFloat(req.body.price)))
         Store.create(req.body)
             .then(
                 (store) => {

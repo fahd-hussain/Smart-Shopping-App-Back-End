@@ -19,11 +19,21 @@ shelfRouter
                 (shelves) => {
                     res.statusCode = 200;
                     res.setHeader("Content-Type", "application/json");
+                    // console.log(shelves.map(item => {
+                    //     item.neighbors.map( temp => console.log(temp) )
+                    // }))
                     const ress = [];
-                    shelves.map( item => {
-                        ress.push({ _id: item._id, name: item.name, row: item.row, isCorner: item.isCorner, column: item.column, neighbors: item.neighbors.map(item => item.neighbor.name) })
-                    })
-                    res.json(ress);
+                    // shelves.map( item => {
+                    //     ress.push({ 
+                    //         _id: item._id, 
+                    //         name: item.name, 
+                    //         row: item.row, 
+                    //         isCorner: item.isCorner, 
+                    //         column: item.column, 
+                    //         neighbors: item.neighbors.map(temp => new Object({"name": temp.neighbor.name, "_id": temp.neighbor._id})) })
+                    // })
+                    console.log(shelves)
+                    res.json(shelves);
                 },
                 (err) => next(err),
             )
