@@ -56,15 +56,19 @@ function onError(error: any) {
 	const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
 
 	// handle specific listen errors with friendly messages
+	/* eslint no-fallthrough: ["error", { "allowEmptyCase": true }] */
 	switch (error.code) {
-		case 'EACCES':
-			console.error(bind + ' requires elevated privileges')
-			process.exit(1)
-		case 'EADDRINUSE':
-			console.error(bind + ' is already in use')
-			process.exit(1)
-		default:
-			throw error
+	case 'EACCES':
+		console.error(bind + ' requires elevated privileges')
+		process.exit(1)
+
+		/* eslint no-fallthrough: ["error", { "allowEmptyCase": true }] */
+	case 'EADDRINUSE':
+		console.error(bind + ' is already in use')
+		process.exit(1)
+		/* eslint no-fallthrough: ["error", { "allowEmptyCase": true }] */
+	default:
+		throw error
 	}
 }
 

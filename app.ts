@@ -1,7 +1,7 @@
-const express = require('express')
-const path = require('path')
-const logger = require('morgan')
-const bodyParser = require('body-parser')
+import bodyParser from 'body-parser'
+import express, { NextFunction, Request, Response } from 'express'
+import logger from 'morgan'
+import path from 'path'
 require('dotenv').config()
 
 // Routes
@@ -33,7 +33,7 @@ connect.then(
 	() => {
 		console.log('Connected correctly to server and Database')
 	},
-	(err) => {
+	(err: any) => {
 		console.log(err)
 	}
 )
@@ -66,14 +66,13 @@ app.use('/shortestPath', shortestPathRouter)
 app.use('/favorite', favoriteRouter)
 
 // catch 404 and forward to error handler
-app.use(function (_req, _res, next) {
+app.use(function (_req, _res, next: NextFunction) {
 	const err = new Error('Not Found')
-	err.status = 404
 	next(err)
 })
 
 // error handler
-app.use(function (err, req, res) {
+app.use(function (err: any, req: Request, res: Response) {
 	// set locals, only providing error in development
 	res.locals.message = err.message
 	res.locals.error = req.app.get('env') === 'development' ? err : {}
