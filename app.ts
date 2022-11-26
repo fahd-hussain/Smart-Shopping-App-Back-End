@@ -2,11 +2,11 @@ import bodyParser from 'body-parser'
 import express, { NextFunction, Request, Response } from 'express'
 import logger from 'morgan'
 import path from 'path'
+import users from './routes/users'
 require('dotenv').config()
 
 // Routes
 const index = require('./routes/index')
-const users = require('./routes/users')
 const promoRouter = require('./routes/promoRouter')
 const listRouter = require('./routes/listRouter')
 const cartRouter = require('./routes/cartRouter')
@@ -17,13 +17,13 @@ const favoriteRouter = require('./routes/favoriteRouter')
 //
 // const adminUser = require("./routes/adminUserRoutes");
 // Database
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 mongoose.Promise = require('bluebird')
 
-const passport = require('passport')
+import passport from 'passport'
 
 // Connection URL
-const url = process.env.mongoUrl
+const url = process.env.mongoUrl || ''
 const connect = mongoose.connect(url, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -33,7 +33,7 @@ connect.then(
 	() => {
 		console.log('Connected correctly to server and Database')
 	},
-	(err: any) => {
+	(err: unknown) => {
 		console.log(err)
 	}
 )
@@ -74,11 +74,11 @@ app.use(function (_req, _res, next: NextFunction) {
 // error handler
 app.use(function (err: any, req: Request, res: Response) {
 	// set locals, only providing error in development
-	res.locals.message = err.message
+	res.locals.message = err['message']
 	res.locals.error = req.app.get('env') === 'development' ? err : {}
 
 	// render the error page
-	res.status(err.status || 500)
+	res.status(err['status'] || 500)
 	res.render('error')
 })
 
