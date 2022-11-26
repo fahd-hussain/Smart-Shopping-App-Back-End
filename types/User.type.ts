@@ -8,3 +8,8 @@ export interface UserInterface extends PassportLocalDocument {
 	profilePicture?: string
 	admin?: boolean
 }
+
+export interface CredentialInterface {
+	username: string
+	password: string
+}

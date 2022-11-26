@@ -4,7 +4,7 @@ const router = express.Router()
 import bodyParser from 'body-parser'
 import User from '../models/user'
 
-import { signup } from '../controller/user.controller'
+import { login, signup } from '../controller/user.controller'
 import { verifyUser } from '../middleware/authenticate'
 
 router.use(bodyParser.json())
@@ -38,41 +38,17 @@ router.post('/signup', async (req: Request, res: Response) => {
 	}
 })
 
-// router.post('/login', (req: Request, res: Response, next: NextFunction) => {
-// 	passport.authenticate('local', (err, user, info) => {
-// 		if (err) return next(err)
-
-// 		if (!user) {
-// 			res.statusCode = 401
-// 			res.setHeader('Content-Type', 'application/json')
-// 			res.json({
-// 				success: false,
-// 				status: 'Login Unsuccessful!',
-// 				err: info,
-// 			})
-// 		}
-// 		req.logIn(user, (err) => {
-// 			if (err) {
-// 				res.statusCode = 401
-// 				res.setHeader('Content-Type', 'application/json')
-// 				res.json({
-// 					success: false,
-// 					status: 'Login Unsuccessful!',
-// 					err: 'Could not log in user!',
-// 				})
-// 			}
-
-// 			const token = authenticate.getToken({ _id: req.user._id })
-// 			res.statusCode = 200
-// 			res.setHeader('Content-Type', 'application/json')
-// 			res.json({
-// 				success: true,
-// 				status: 'Login Successful!',
-// 				token: token,
-// 			})
-// 		})
-// 	})(req, res, next)
-// })
+router.post('/login', async (req: Request, res: Response) => {
+	try {
+		const resp = await login(req.body)
+		res.statusCode = 200
+		res.json(resp)
+	} catch (error) {
+		console.error(error)
+		res.statusCode = 500
+		res.json(error)
+	}
+})
 
 // router.get('/logout', (req, res) => {
 // 	req.logout()
