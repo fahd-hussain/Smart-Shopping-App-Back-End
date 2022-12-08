@@ -22,30 +22,22 @@ promoRouter
 			)
 			.catch((err) => next(err))
 	})
-	.post(
-		authenticate.verifyUser,
-		authenticate.verifyAdmin,
-		(req, res, next) => {
-			Promotions.create(req.body)
-				.then(
-					(promotion) => {
-						res.statusCode = 200
-						res.setHeader('Content-Type', 'application/json')
-						res.json(promotion)
-					},
-					(err) => next(err)
-				)
-				.catch((err) => next(err))
-		}
-	)
-	.put(
-		authenticate.verifyUser,
-		authenticate.verifyAdmin,
-		(req, res) => {
-			res.statusCode = 403
-			res.end('PUT operation not supported on /promotions')
-		}
-	)
+	.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+		Promotions.create(req.body)
+			.then(
+				(promotion) => {
+					res.statusCode = 200
+					res.setHeader('Content-Type', 'application/json')
+					res.json(promotion)
+				},
+				(err) => next(err)
+			)
+			.catch((err) => next(err))
+	})
+	.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+		res.statusCode = 403
+		res.end('PUT operation not supported on /promotions')
+	})
 	.delete(
 		authenticate.verifyUser,
 		authenticate.verifyAdmin,
@@ -77,39 +69,28 @@ promoRouter
 			)
 			.catch((err) => next(err))
 	})
-	.post(
-		authenticate.verifyUser,
-		authenticate.verifyAdmin,
-		(req, res) => {
-			res.statusCode = 403
-			res.end(
-				'POST operation not supported on /promotions/' +
-                    req.params.promoId
-			)
-		}
-	)
-	.put(
-		authenticate.verifyUser,
-		authenticate.verifyAdmin,
-		(req, res, next) => {
-			Promotions.findByIdAndUpdate(
-				req.params.promoId,
-				{
-					$set: req.body,
+	.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+		res.statusCode = 403
+		res.end('POST operation not supported on /promotions/' + req.params.promoId)
+	})
+	.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+		Promotions.findByIdAndUpdate(
+			req.params.promoId,
+			{
+				$set: req.body,
+			},
+			{ new: true }
+		)
+			.then(
+				(promotion) => {
+					res.statusCode = 200
+					res.setHeader('Content-Type', 'application/json')
+					res.json(promotion)
 				},
-				{ new: true }
+				(err) => next(err)
 			)
-				.then(
-					(promotion) => {
-						res.statusCode = 200
-						res.setHeader('Content-Type', 'application/json')
-						res.json(promotion)
-					},
-					(err) => next(err)
-				)
-				.catch((err) => next(err))
-		}
-	)
+			.catch((err) => next(err))
+	})
 	.delete(
 		authenticate.verifyUser,
 		authenticate.verifyAdmin,
