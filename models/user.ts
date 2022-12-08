@@ -2,7 +2,7 @@ import { model, PassportLocalSchema, Schema } from 'mongoose'
 import passportLocalMongoose from 'passport-local-mongoose'
 import { UserInterface } from '../types/User.type'
 
-const UserSchema: PassportLocalSchema = new Schema({
+const UserSchema: PassportLocalSchema<any, any> = new Schema({
 	firstName: {
 		type: String,
 		default: '',

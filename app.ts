@@ -2,7 +2,7 @@ import bodyParser from 'body-parser'
 import express, { NextFunction, Request, Response } from 'express'
 import logger from 'morgan'
 import path from 'path'
-import users from './routes/users'
+import user from './routes/users'
 require('dotenv').config()
 
 // Routes
@@ -53,7 +53,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(passport.initialize())
 // User Route
 app.use('/', index)
-app.use('/users', users)
+app.use('/user', user)
 // app.use("/admin", adminUser);
 
 // Routes

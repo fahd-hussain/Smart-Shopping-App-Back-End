@@ -1,11 +1,11 @@
-import express, { NextFunction, Request, Response } from 'express'
-const router = express.Router()
-
 import bodyParser from 'body-parser'
-import User from '../models/user'
-
+import express, { NextFunction, Request, Response } from 'express'
 import { login, signup } from '../controller/user.controller'
 import { verifyUser } from '../middleware/authenticate'
+import User from '../models/user'
+import { UserInterface } from '../types/User.type'
+
+const router = express.Router()
 
 router.use(bodyParser.json())
 
@@ -16,12 +16,12 @@ router.get(
 	verifyUser,
 	(_req: Request, res: Response, next: NextFunction) => {
 		User.find({})
-			.then((users) => {
+			.then((users: UserInterface[]) => {
 				res.statusCode = 200
 				res.setHeader('Content-Type', 'application/json')
 				res.json(users)
 			})
-			.catch((err) => next(err))
+			.catch((err: unknown) => next(err))
 	}
 )
 
@@ -57,24 +57,10 @@ router.post('/login', async (req: Request, res: Response) => {
 // 	res.json({ success: true, status: 'Logout Successful!', token: null })
 // })
 
-// router.get('/profile', (req, res, next) => {
-// 	passport.authenticate('jwt', { session: false }, (err, user, info) => {
-// 		if (err) return next(err)
-
-// 		if (!user) {
-// 			res.statusCode = 401
-// 			res.setHeader('Content-Type', 'application/json')
-// 			return res.json({
-// 				status: 'JWT invalid!',
-// 				success: false,
-// 				err: info,
-// 			})
-// 		} else {
-// 			res.statusCode = 200
-// 			res.setHeader('Content-Type', 'application/json')
-// 			return res.json({ status: 'JWT valid!', success: true, user: user })
-// 		}
-// 	})(req, res)
-// })
+router.get('/profile', verifyUser, (req, res) => {
+	const resp = req.user
+	res.statusCode = 200
+	res.json(resp)
+})
 
 export default router
