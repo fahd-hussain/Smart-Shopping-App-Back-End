@@ -24,10 +24,7 @@ import passport from 'passport'
 
 // Connection URL
 const url = process.env.mongoUrl || ''
-const connect = mongoose.connect(url, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-})
+const connect = mongoose.connect(url)
 
 connect.then(
 	() => {

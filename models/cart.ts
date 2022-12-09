@@ -1,9 +1,7 @@
-import mongoose, { Model } from 'mongoose'
+import { model, Schema } from 'mongoose'
 import { CartInterface } from '../types/Cart.types'
-const Schema = mongoose.Schema
-const Types = mongoose.Types
 
-const cartSchema = new Schema<CartInterface, Model<CartInterface>>(
+const cartSchema = new Schema<CartInterface>(
 	{
 		items: [
 			{
@@ -32,7 +30,7 @@ const cartSchema = new Schema<CartInterface, Model<CartInterface>>(
 			min: 0,
 		},
 		author: {
-			type: Types.ObjectId,
+			type: Schema.Types.ObjectId,
 			ref: 'User',
 		},
 		paid: {
@@ -45,4 +43,4 @@ const cartSchema = new Schema<CartInterface, Model<CartInterface>>(
 	}
 )
 
-export default mongoose.model('Cart', cartSchema)
+export default model<CartInterface>('Cart', cartSchema)
