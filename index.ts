@@ -1,6 +1,6 @@
-const app = require('./app')
 import debug from 'debug'
 import http from 'http'
+import app from './app'
 
 debug('smart-shopping-app:server')
 /**

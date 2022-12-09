@@ -5,5 +5,5 @@
 		"source.fixAll": true,
 		"source.organizeImports": true
 	},
-	"cSpell.words": ["pureimage", "roughjs"]
+	"cSpell.words": ["dotfiles", "pureimage", "roughjs"]
 }

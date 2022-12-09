@@ -2,11 +2,11 @@ import bodyParser from 'body-parser'
 import express, { NextFunction, Request, Response } from 'express'
 import logger from 'morgan'
 import path from 'path'
-import user from './routes/users'
 require('dotenv').config()
 
 // Routes
-const index = require('./routes/index')
+import index from './routes/index'
+import user from './routes/users'
 const promoRouter = require('./routes/promoRouter')
 const listRouter = require('./routes/listRouter')
 const cartRouter = require('./routes/cartRouter')
@@ -38,7 +38,19 @@ connect.then(
 const app = express()
 
 // view engine setup
-app.use(express.static(path.join(__dirname, 'public')))
+const options = {
+	dotfiles: 'ignore',
+	etag: false,
+	extensions: ['htm', 'html'],
+	index: false,
+	maxAge: '1d',
+	redirect: false,
+	setHeaders(res: Response) {
+		res.set('x-timestamp', Date.now().toString())
+	},
+}
+
+app.use(express.static(path.join(__dirname, 'public'), options))
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
@@ -79,4 +91,4 @@ app.use(function (err: any, req: Request, res: Response) {
 	res.render('error')
 })
 
-module.exports = app
+export default app

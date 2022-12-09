@@ -22,7 +22,7 @@ router.get(
 				res.setHeader('Content-Type', 'application/json')
 				res.json(users)
 			})
-			.catch((err: unknown) => next(err))
+			.catch(next)
 	}
 )
 
