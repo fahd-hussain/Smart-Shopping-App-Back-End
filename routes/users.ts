@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser'
 import express, { NextFunction, Request, Response } from 'express'
 import { login, signup } from '../controller/user.controller'
-import { verifyUser } from '../middleware/authenticate'
+import { verifyAdmin, verifyUser } from '../middleware/authenticate'
 import User from '../models/user'
 import { UserInterface } from '../types/User.type'
 
@@ -14,6 +14,7 @@ router.use(bodyParser.json())
 router.get(
 	'/',
 	verifyUser,
+	verifyAdmin,
 	(_req: Request, res: Response, next: NextFunction) => {
 		User.find({})
 			.then((users: UserInterface[]) => {

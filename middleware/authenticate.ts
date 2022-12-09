@@ -4,6 +4,7 @@ import { Types } from 'mongoose'
 import { StrategyOptions } from 'passport-jwt'
 import User from '../models/user'
 import { UserInterface } from '../types/User.type'
+import assertHasUser from '../utils/assertHasUser.util'
 require('dotenv').config()
 
 const passport = require('passport')
@@ -46,31 +47,18 @@ export const jwtPassport = passport.use(
 
 export const verifyUser = passport.authenticate('jwt', { session: false })
 
-export const verifyAdmin = (
-	req: Request & { user: UserInterface },
+export const verifyAdmin = async (
+	req: Request,
 	_res: Response,
 	next: NextFunction
 ) => {
-	User.findOne({ _id: req.user._id })
-		.then(
-			(user: UserInterface | null) => {
-				if (user === null) {
-					const err = new Error(
-						'You are not authorized to perform this operation!'
-					)
-					return next({ ...err, status: 403 })
-				}
+	assertHasUser(req)
+	User.findOne({ _id: req.user._id }, (_err: never, user: UserInterface) => {
+		if (user.admin) {
+			return next()
+		}
 
-				if (!user.admin) {
-					const err = new Error(
-						'You are not authorized to perform this operation!'
-					)
-					return next({ ...err, status: 403 })
-				}
-
-				next()
-			},
-			(err: unknown) => next(err)
-		)
-		.catch((err: unknown) => next(err))
+		const err = new Error('Unauthorized')
+		return next({ ...err, status: 403 })
+	})
 }
