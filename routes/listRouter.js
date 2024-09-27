@@ -62,10 +62,7 @@ listRouter
 									.populate('author')
 									.then((list) => {
 										res.statusCode = 200
-										res.setHeader(
-											'Content-Type',
-											'application/json'
-										)
+										res.setHeader('Content-Type', 'application/json')
 										res.json(list)
 									})
 							},
@@ -122,9 +119,7 @@ listRouter
 				(list) => {
 					if (list != null) {
 						if (!list.author.equals(req.user._id)) {
-							var err = new Error(
-								'You are not authorized to update this list!'
-							)
+							var err = new Error('You are not authorized to update this list!')
 							err.status = 403
 							return next(err)
 						}
@@ -141,19 +136,14 @@ listRouter
 									.populate('author')
 									.then((list) => {
 										res.statusCode = 200
-										res.setHeader(
-											'Content-Type',
-											'application/json'
-										)
+										res.setHeader('Content-Type', 'application/json')
 										res.json(list)
 									})
 							},
 							(err) => next(err)
 						)
 					} else {
-						err = new Error(
-							'List ' + req.params.listId + ' not found'
-						)
+						err = new Error('List ' + req.params.listId + ' not found')
 						err.status = 404
 						return next(err)
 					}
@@ -168,9 +158,7 @@ listRouter
 				(list) => {
 					if (list != null) {
 						if (!list.author.equals(req.user._id)) {
-							var err = new Error(
-								'You are not authorized to delete this list!'
-							)
+							var err = new Error('You are not authorized to delete this list!')
 							err.status = 403
 							return next(err)
 						}
@@ -178,19 +166,14 @@ listRouter
 							.then(
 								(resp) => {
 									res.statusCode = 200
-									res.setHeader(
-										'Content-Type',
-										'application/json'
-									)
+									res.setHeader('Content-Type', 'application/json')
 									res.json(resp)
 								},
 								(err) => next(err)
 							)
 							.catch((err) => next(err))
 					} else {
-						err = new Error(
-							'List ' + req.params.listId + ' not found'
-						)
+						err = new Error('List ' + req.params.listId + ' not found')
 						err.status = 404
 						return next(err)
 					}

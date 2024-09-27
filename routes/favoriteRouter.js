@@ -40,10 +40,7 @@ favoriteRouter
 							(favorite) => {
 								console.log('Favorite Created ', favorite)
 								res.statusCode = 200
-								res.setHeader(
-									'Content-Type',
-									'application/json'
-								)
+								res.setHeader('Content-Type', 'application/json')
 								res.json(favorite)
 							},
 							(err) => next(err)
@@ -56,10 +53,7 @@ favoriteRouter
 							(favorite) => {
 								console.log('Favorite is Created ', favorite)
 								res.statusCode = 200
-								res.setHeader(
-									'Content-Type',
-									'application/json'
-								)
+								res.setHeader('Content-Type', 'application/json')
 								res.json(favorite)
 							},
 							(err) => next(err)
@@ -102,9 +96,7 @@ favoriteRouter
 						res.setHeader('Content-Type', 'application/json')
 						return res.json({ exists: false, favorites: favorites })
 					} else {
-						if (
-							favorites.promotion.indexOf(req.params.promoId) < 0
-						) {
+						if (favorites.promotion.indexOf(req.params.promoId) < 0) {
 							res.statusCode = 200
 							res.setHeader('Content-Type', 'application/json')
 							return res.json({
@@ -132,19 +124,13 @@ favoriteRouter
 			.then(
 				(favorite) => {
 					if (favorite) {
-						if (
-							favorite.promotion.indexOf(req.params.promoId) ===
-							-1
-						) {
+						if (favorite.promotion.indexOf(req.params.promoId) === -1) {
 							favorite.promotion.push(req.params.promoId)
 							favorite.save().then(
 								(favorite) => {
 									console.log('Favorite Created ', favorite)
 									res.statusCode = 200
-									res.setHeader(
-										'Content-Type',
-										'application/json'
-									)
+									res.setHeader('Content-Type', 'application/json')
 									res.json(favorite)
 								},
 								(err) => next(err)
@@ -158,10 +144,7 @@ favoriteRouter
 							(favorite) => {
 								console.log('Favorite Created ', favorite)
 								res.statusCode = 200
-								res.setHeader(
-									'Content-Type',
-									'application/json'
-								)
+								res.setHeader('Content-Type', 'application/json')
 								res.json(favorite)
 							},
 							(err) => next(err)
@@ -174,9 +157,7 @@ favoriteRouter
 	})
 	.put(authenticate.verifyUser, (req, res) => {
 		res.statusCode = 403
-		res.end(
-			'PUT operation not supported on /favorites/' + req.params.promoId
-		)
+		res.end('PUT operation not supported on /favorites/' + req.params.promoId)
 	})
 	.delete(authenticate.verifyUser, (req, res, next) => {
 		Favorites.findOne({ user: req.user._id })
@@ -197,15 +178,9 @@ favoriteRouter
 										.populate('user')
 										.populate('promotion')
 										.then((favorite) => {
-											console.log(
-												'Favorite Promotion Deleted!',
-												favorite
-											)
+											console.log('Favorite Promotion Deleted!', favorite)
 											res.statusCode = 200
-											res.setHeader(
-												'Content-Type',
-												'application/json'
-											)
+											res.setHeader('Content-Type', 'application/json')
 											res.json(favorite)
 										})
 								},

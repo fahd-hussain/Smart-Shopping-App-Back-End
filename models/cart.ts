@@ -1,10 +1,9 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const Currency = mongoose.Types.Currency
+import { model, Schema } from 'mongoose'
+import { CartInterface } from '../types/Cart.types'
 
-const cartSchema = new Schema(
+const cartSchema = new Schema<CartInterface>(
 	{
-		cartItems: [
+		items: [
 			{
 				name: {
 					type: String,
@@ -15,7 +14,7 @@ const cartSchema = new Schema(
 					required: true,
 				},
 				price: {
-					type: Currency,
+					type: Number,
 					required: true,
 					min: 0,
 				},
@@ -26,12 +25,12 @@ const cartSchema = new Schema(
 			},
 		],
 		totalPrice: {
-			type: Currency,
+			type: Number,
 			required: true,
 			min: 0,
 		},
 		author: {
-			type: mongoose.Schema.Types.ObjectId,
+			type: Schema.Types.ObjectId,
 			ref: 'User',
 		},
 		paid: {
@@ -44,6 +43,4 @@ const cartSchema = new Schema(
 	}
 )
 
-const Carts = mongoose.model('Cart', cartSchema)
-
-module.exports = Carts
+export default model<CartInterface>('Cart', cartSchema)

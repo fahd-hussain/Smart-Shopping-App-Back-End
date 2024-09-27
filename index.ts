@@ -1,6 +1,6 @@
-const app = require('./app')
 import debug from 'debug'
 import http from 'http'
+import app from './app'
 
 debug('smart-shopping-app:server')
 /**
@@ -58,17 +58,17 @@ function onError(error: any) {
 	// handle specific listen errors with friendly messages
 	/* eslint no-fallthrough: ["error", { "allowEmptyCase": true }] */
 	switch (error.code) {
-	case 'EACCES':
-		console.error(bind + ' requires elevated privileges')
-		process.exit(1)
+		case 'EACCES':
+			console.error(bind + ' requires elevated privileges')
+			process.exit(1)
 
 		/* eslint no-fallthrough: ["error", { "allowEmptyCase": true }] */
-	case 'EADDRINUSE':
-		console.error(bind + ' is already in use')
-		process.exit(1)
+		case 'EADDRINUSE':
+			console.error(bind + ' is already in use')
+			process.exit(1)
 		/* eslint no-fallthrough: ["error", { "allowEmptyCase": true }] */
-	default:
-		throw error
+		default:
+			throw error
 	}
 }
 
@@ -78,7 +78,6 @@ function onError(error: any) {
 
 function onListening() {
 	const addr = server.address()
-	const bind =
-		typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port
+	const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port
 	debug('Listening on ' + bind)
 }
