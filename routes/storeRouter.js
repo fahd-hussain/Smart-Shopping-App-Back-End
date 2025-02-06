@@ -23,23 +23,19 @@ storeRouter
 			)
 			.catch((err) => next(err))
 	})
-	.post(
-		authenticate.verifyUser,
-		authenticate.verifyAdmin,
-		(req, res, next) => {
-			// console.log(typeof(parseFloat(req.body.price)))
-			Store.create(req.body)
-				.then(
-					(store) => {
-						res.statusCode = 200
-						res.setHeader('Content-Type', 'application/json')
-						res.json(store)
-					},
-					(err) => next(err)
-				)
-				.catch((err) => next(err))
-		}
-	)
+	.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+		// console.log(typeof(parseFloat(req.body.price)))
+		Store.create(req.body)
+			.then(
+				(store) => {
+					res.statusCode = 200
+					res.setHeader('Content-Type', 'application/json')
+					res.json(store)
+				},
+				(err) => next(err)
+			)
+			.catch((err) => next(err))
+	})
 	.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
 		res.statusCode = 403
 		res.end('PUT operation not supported on /stores')

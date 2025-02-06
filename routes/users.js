@@ -29,7 +29,7 @@ router.get(
 	}
 )
 /* User panel */
-router.post('/signup', (req, res, ) => {
+router.post('/signup', (req, res) => {
 	User.register(
 		new User({ username: req.body.username }),
 		req.body.password,

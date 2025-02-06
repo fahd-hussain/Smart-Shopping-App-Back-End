@@ -43,10 +43,7 @@ cartRouter
 							.populate('product')
 							.then((cart) => {
 								res.statusCode = 200
-								res.setHeader(
-									'Content-Type',
-									'application/json'
-								)
+								res.setHeader('Content-Type', 'application/json')
 								res.json(cart)
 							})
 					},
@@ -102,9 +99,7 @@ cartRouter
 				(cart) => {
 					if (cart != null) {
 						if (!cart.author.equals(req.user._id)) {
-							var err = new Error(
-								'You are not authorized to update this cart!'
-							)
+							var err = new Error('You are not authorized to update this cart!')
 							err.status = 403
 							return next(err)
 						}
@@ -122,19 +117,14 @@ cartRouter
 									.populate('product')
 									.then((cart) => {
 										res.statusCode = 200
-										res.setHeader(
-											'Content-Type',
-											'application/json'
-										)
+										res.setHeader('Content-Type', 'application/json')
 										res.json(cart)
 									})
 							},
 							(err) => next(err)
 						)
 					} else {
-						err = new Error(
-							'Cart ' + req.params.cartId + ' not found'
-						)
+						err = new Error('Cart ' + req.params.cartId + ' not found')
 						err.status = 404
 						return next(err)
 					}
@@ -149,9 +139,7 @@ cartRouter
 				(cart) => {
 					if (cart != null) {
 						if (!cart.author.equals(req.user._id)) {
-							var err = new Error(
-								'You are not authorized to delete this cart!'
-							)
+							var err = new Error('You are not authorized to delete this cart!')
 							err.status = 403
 							return next(err)
 						}
@@ -159,19 +147,14 @@ cartRouter
 							.then(
 								(resp) => {
 									res.statusCode = 200
-									res.setHeader(
-										'Content-Type',
-										'application/json'
-									)
+									res.setHeader('Content-Type', 'application/json')
 									res.json(resp)
 								},
 								(err) => next(err)
 							)
 							.catch((err) => next(err))
 					} else {
-						err = new Error(
-							'Cart ' + req.params.cartId + ' not found'
-						)
+						err = new Error('Cart ' + req.params.cartId + ' not found')
 						err.status = 404
 						return next(err)
 					}
