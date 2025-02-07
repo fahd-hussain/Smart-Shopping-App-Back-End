@@ -33,7 +33,9 @@
 		"pureimage": "^0.2.1",
 		"roughjs": "^4.3.1",
 		"serve-favicon": "~2.4.5",
-		"session-file-store": "^1.1.2"
+		"session-file-store": "^1.1.2",
+		"swagger-jsdoc": "^6.2.8",
+		"swagger-ui-express": "^5.0.1"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.22",

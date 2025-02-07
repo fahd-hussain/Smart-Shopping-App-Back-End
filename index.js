@@ -5,6 +5,9 @@ const express = require('express')
 const logger = require('morgan')
 const path = require('path')
 
+const swaggerJsdoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
+
 const dotEnv = require('dotenv')
 dotEnv.config()
 // Routes
@@ -17,7 +20,7 @@ const promoRouter = require('./routes/promoRouter')
 
 const listRouter = require('./routes/listRouter')
 
-const cartRouter = require('./routes/cartRouter')
+const cartRouter = require('./routes/cart')
 
 const storeRouter = require('./routes/storeRouter')
 
@@ -60,6 +63,20 @@ connect.then(
 )
 
 const app = express()
+
+const options = {
+	definition: {
+		openapi: '3.0.0',
+		info: {
+			title: 'Smart Shopping App',
+			version: '1.0.0',
+		},
+	},
+	apis: ['./routes/*.js', './routes/**/*.js'],
+}
+
+const specs = swaggerJsdoc(options)
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(specs))
 
 // view engine setup
 
